@@ -5,7 +5,7 @@
     "": {
       "name": "ldraw-index",
       "dependencies": {
-        "@gigatrappeur/ldraw-parser": "^1.0",
+        "@gigatrappeur/ldraw-parser": "^1.0.2",
         "@types/adm-zip": "^0.5.8",
         "adm-zip": "^0.6.1",
         "yargs-parser": "^22.0.0",
@@ -38,7 +38,7 @@
 
     "@gigatrappeur/ldraw-index-three": ["@gigatrappeur/ldraw-index-three@workspace:helpers/three"],
 
-    "@gigatrappeur/ldraw-parser": ["@gigatrappeur/ldraw-parser@1.0.1", "", {}, "sha512-9AqjcsD66ZC8Qy/FEHcvLq2qNSEPDB/0oFppJQkvmEdgOwMUojAUaUQ4kLnO+8RrrHwlLWDVE+bfiP5wOVK0DA=="],
+    "@gigatrappeur/ldraw-parser": ["@gigatrappeur/ldraw-parser@1.0.2", "", {}, "sha512-/Wk8G1WKbUr+JQVdrKY59eMnEwT28OPLPZffNpZyWUMbJ1CqVm0e870gP2J82B6dhsp1v3yjvjXaK+aZwOTTfg=="],
 
     "@types/adm-zip": ["@types/adm-zip@0.5.8", "", { "dependencies": { "@types/node": "*" } }, "sha512-RVVH7QvZYbN+ihqZ4kX/dMiowf6o+Jk1fNwiSdx0NahBJLU787zkULhGhJM8mf/obmLGmgdMM0bXsQTmyfbR7Q=="],
 
