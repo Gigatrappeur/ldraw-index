@@ -7,7 +7,7 @@
 
 import * as THREE from "three"
 
-import type { PartMaterial } from "@gigatrappeur/brick-index"
+import type { PartMaterial } from "@gigatrappeur/ldraw-index"
 
 /** Réglages optionnels de conversion d'un matériau brick-index vers Three.js. */
 export interface MaterialToThreeOptions {

@@ -9,7 +9,7 @@ import type {
 	PartGeometry,
 	PartGeometryMesh,
 	PartMaterial,
-} from "@gigatrappeur/brick-index";
+} from "@gigatrappeur/ldraw-index";
 import {
 	geometryToBufferGeometry,
 	edgesToLineSegments,
@@ -47,10 +47,10 @@ describe("geometryToBufferGeometry", () => {
 	it("monte positions / normales / UVs / indices", () => {
 		const geometry = geometryToBufferGeometry(makeMesh());
 
-		expect(geometry.attributes.position.count).toBe(3);
-		expect(geometry.attributes.position.array).toHaveLength(9);
-		expect(geometry.attributes.normal.count).toBe(3);
-		expect(geometry.attributes.uv.count).toBe(3);
+		expect(geometry.attributes.position!.count).toBe(3);
+		expect(geometry.attributes.position!.array).toHaveLength(9);
+		expect(geometry.attributes.normal!.count).toBe(3);
+		expect(geometry.attributes.uv!.count).toBe(3);
 		expect(geometry.getIndex()?.array).toHaveLength(3);
 		expect(geometry.index?.array[0]).toBe(0);
 	});

@@ -9,7 +9,7 @@
 
 import * as THREE from "three"
 
-import type { PartGeometry, PartGeometryMesh, PartGeometryEdges } from "@gigatrappeur/brick-index"
+import type { PartGeometry, PartGeometryMesh, PartGeometryEdges } from "@gigatrappeur/ldraw-index"
 import { materialToThree, type MaterialToThreeOptions } from "./material"
 
 /** Options du montage complet du modèle. */
