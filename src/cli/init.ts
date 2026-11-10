@@ -15,15 +15,15 @@ Options:
   --data <path>        Dossier de destination (default: data/)
   --url <url>          URL directe de l'archive à télécharger
   --version <tag>      Tag GitHub release (default: latest)
-   --repo <owner/repo>  Dépôt GitHub (default: Gigatrappeur/brick-index-data)
+   --repo <owner/repo>  Dépôt GitHub (default: Gigatrappeur/ldraw-index)
   --force              Forcer le téléchargement même si les données existent
   --help               Afficher cette aide
 
 Exemples:
   bun run cli/init.ts
   bun run cli/init.ts --version v1.0.0
-  bun run cli/init.ts --url https://github.com/Gigatrappeur/brick-index-data/releases/download/v1.0.0/data.zip
-  bun run cli/init.ts --data /tmp/brick-data --force
+  bun run cli/init.ts --url https://github.com/Gigatrappeur/ldraw-index/releases/download/v1.0.0/data.zip
+  bun run cli/init.ts --data /tmp/ldraw-data --force
   `);
 }
 
@@ -82,7 +82,7 @@ export async function runInit(args: string[] = []): Promise<void> {
 		boolean: ["help", "h", "force"],
 		default: {
 			data: join(process.cwd(), "data"),
-			repo: "Gigatrappeur/brick-index-data",
+			repo: "Gigatrappeur/ldraw-index",
 		},
 	}) as Record<string, unknown>;
 
@@ -98,7 +98,7 @@ export async function runInit(args: string[] = []): Promise<void> {
 	const force = parsed['force'] as boolean;
 
 	// Vérifier si les données existent déjà
-	const sqlitePath = join(dataDir, "brick-data.sqlite");
+	const sqlitePath = join(dataDir, "ldraw-data.sqlite");
 	if (!force && existsSync(sqlitePath)) {
 		console.log(`[init] Les données existent déjà dans ${dataDir}`);
 		console.log(`  Utilisez --force pour re-télécharger.`);
@@ -115,7 +115,7 @@ export async function runInit(args: string[] = []): Promise<void> {
 		// mais le nom du fichier archive n'inclut pas le préfixe (brick-data-1.1.0.zip)
 		const cleanTag = tag.startsWith('v') ? tag.slice(1) : tag;
 		console.log(`[init] Release: ${tag} (fichier: ${cleanTag})`);
-		downloadUrl = `https://github.com/${repo}/releases/download/${tag}/brick-data-${cleanTag}.zip`;
+		downloadUrl = `https://github.com/${repo}/releases/download/${tag}/ldraw-data-${cleanTag}.zip`;
 	}
 
 	await mkdir(dataDir, { recursive: true });

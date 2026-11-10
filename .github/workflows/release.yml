@@ -1,0 +1,116 @@
+name: Release & Publish
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write   # tag + release
+  packages: write   # npm publish sur GitHub Packages
+
+jobs:
+  version:
+    name: Resolve version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      exists: ${{ steps.tag-check.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Get version from package.json
+        id: version
+        run: |
+          VERSION=$(bun -p "JSON.parse(require('fs').readFileSync('package.json')).version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: $VERSION"
+
+      - name: Check if tag exists
+        id: tag-check
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Tag $TAG already exists"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Tag $TAG does not exist"
+          fi
+
+  publish-npm:
+    name: Publish @gigatrappeur/ldraw-index
+    needs: version
+    if: needs.version.outputs.exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Authenticate GitHub Packages
+        run: |
+          printf '@gigatrappeur:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=%s\n' \
+            "${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Publish
+        run: bun publish
+
+  release:
+    name: Create data release
+    needs: version
+    if: needs.version.outputs.exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Get release notes from version bump
+        id: notes
+        run: |
+          COMMIT=$(git log --format=%H -- package.json | head -n1)
+          NOTES=$(git log -1 --pretty=format:"%s%n%n%b" "$COMMIT")
+          echo "notes<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$NOTES" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Build index
+        run: cd indexer && bun run index
+
+      - name: Create tag and release with asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          ASSET="ldraw-data-${{ steps.version.outputs.version }}.zip"
+
+          cd data
+          EXCL_FLAG=""
+          if [ -f "../excluded-pieces.txt" ]; then EXCL_FLAG="-x @../excluded-pieces.txt"; fi
+          zip -r "../$ASSET" . -x "*.DS_Store" ".git/*" "node_modules/*" $EXCL_FLAG
+          cd ..
+
+          gh release create "$TAG" "$ASSET" \
+            --title "Release $TAG" \
+            --notes "$(echo "${{ steps.notes.outputs.notes }}")"

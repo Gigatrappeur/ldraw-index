@@ -18,7 +18,7 @@ import {
   parsePartCategoriesCSV,
 } from "./csv";
 
-const DATA_DIR = join(import.meta.dir, "..", "data");
+const DATA_DIR = join(import.meta.dir, "..", "..", "data");
 const LDRAW_DIR = join(DATA_DIR, "ldraw");
 const PARTS_DIR = join(LDRAW_DIR, "parts");
 const DB_PATH = join(DATA_DIR, "brick-data.sqlite");
@@ -30,7 +30,7 @@ const RB_CATEGORIES = join(DATA_DIR, "rebrickable", "part_categories.csv");
 
 // Config d'exclusion des catégories et liste des .dat exclus (générée, à la racine du repo).
 const EXCLUDE_CONFIG_PATH = join(import.meta.dir, "..", "exclude-categories.json");
-const EXCLUDED_LIST_PATH = join(import.meta.dir, "..", "excluded-pieces.txt");
+const EXCLUDED_LIST_PATH = join(import.meta.dir, "..", "..", "excluded-pieces.txt");
 
 const SCHEMA = `
   -- Pièce LDraw canonique : UNE ligne par ldraw_ref.
