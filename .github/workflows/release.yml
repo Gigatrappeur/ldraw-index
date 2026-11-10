@@ -58,7 +58,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile && cd indexer && bun install --frozen-lockfile
 
       - name: Typecheck
         run: bun run typecheck
@@ -88,7 +88,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: cd indexer && bun install --frozen-lockfile
 
       - name: Get release notes from version bump
         id: notes
