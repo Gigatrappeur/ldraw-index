@@ -1,0 +1,55 @@
+{
+	"name": "@gigatrappeur/ldraw-index",
+	"version": "1.0.0",
+	"description": "Catalogue de pièces LEGO/LDraw avec recherche full-text (FTS5), mapping Rebrickable et génération SVG/GLB",
+	"author": "Gigatrapper",
+	"homepage": "https://github.com/Gigatrappeur/ldraw-index#readme",
+	"license": "MIT",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Gigatrappeur/ldraw-index"
+	},
+	"keywords": [ "lego", "ldraw", "glb", "svg", "catalog", "brick", "3d", "model", "toy" ],
+	"engines": {
+		"bun": ">=1"
+	},
+	"workspaces": [ "helpers/*" ],
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"bin": {
+		"ldraw-index": "./src/cli/index.ts"
+	},
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"report": "bun run src/cli/report.ts",
+		"init": "bun run src/cli/init.ts",
+		"search": "bun run src/cli/search.ts",
+		"get": "bun run src/cli/get.ts",
+		"get:svg": "bun run src/cli/get.ts --format svg",
+		"get:geometry": "bun run src/cli/getGeometry.ts",
+		"test": "bun test",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@gigatrappeur/ldraw-parser": "^1.0",
+		"@types/adm-zip": "^0.5.8",
+		"adm-zip": "^0.6.1",
+		"yargs-parser": "^22.0.0"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/yargs-parser": "^21.0.3",
+		"typescript": "^7.0.2"
+	},
+	"files": [
+		"src/",
+		"README.md",
+		"LICENSE"
+	]
+}
