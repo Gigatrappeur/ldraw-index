@@ -1,6 +1,6 @@
 {
 	"name": "@gigatrappeur/ldraw-index",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Catalogue de pièces LEGO/LDraw avec recherche full-text (FTS5), mapping Rebrickable et génération SVG/GLB",
 	"author": "Gigatrapper",
 	"homepage": "https://github.com/Gigatrappeur/ldraw-index#readme",
