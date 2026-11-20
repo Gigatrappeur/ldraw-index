@@ -21,7 +21,7 @@ import {
 const DATA_DIR = join(import.meta.dir, "..", "..", "data");
 const LDRAW_DIR = join(DATA_DIR, "ldraw");
 const PARTS_DIR = join(LDRAW_DIR, "parts");
-const DB_PATH = join(DATA_DIR, "brick-data.sqlite");
+const DB_PATH = join(DATA_DIR, "ldraw-data.sqlite");
 
 const RB_COLORS = join(DATA_DIR, "rebrickable", "colors.csv");
 const RB_ELEMENTS = join(DATA_DIR, "rebrickable", "elements.csv");
