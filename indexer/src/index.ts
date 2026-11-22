@@ -2,7 +2,7 @@
 // index.ts — Indexation complète (Rebrickable + LDraw)
 
 import { Database } from "bun:sqlite";
-import { stat, readdir, exists } from "node:fs/promises";
+import { stat, readdir, access } from "node:fs/promises";
 import { readFileSync, writeFileSync, statSync } from "node:fs";
 import type { Dirent } from "node:fs";
 import { join } from "node:path";
@@ -31,6 +31,11 @@ const RB_CATEGORIES = join(DATA_DIR, "rebrickable", "part_categories.csv");
 // Config d'exclusion des catégories et liste des .dat exclus (générée, à la racine du repo).
 const EXCLUDE_CONFIG_PATH = join(import.meta.dir, "..", "exclude-categories.json");
 const EXCLUDED_LIST_PATH = join(import.meta.dir, "..", "..", "excluded-pieces.txt");
+
+// Retourne true si le chemin existe (fichier ou dossier). `access` rejette (ENOENT) quand il
+// n'existe pas ; on normalise donc le résultat en booléen.
+const pathExists = (p: string): Promise<boolean> =>
+  access(p).then(() => true).catch(() => false);
 
 const SCHEMA = `
   -- Pièce LDraw canonique : UNE ligne par ldraw_ref.
@@ -363,8 +368,8 @@ async function loadRebrickableData(_ldrawParser: LDrawParser): Promise<{
 }> {
   console.log("[index] Chargement CSV Rebrickable...");
   await Promise.all([
-    exists(RB_COLORS).then(v => { if (!v) throw new Error(`CSV couleurs introuvable: ${RB_COLORS}`); }),
-    exists(RB_ELEMENTS).then(v => { if (!v) throw new Error(`CSV éléments introuvable: ${RB_ELEMENTS}`); }),
+    pathExists(RB_COLORS).then(v => { if (!v) throw new Error(`CSV couleurs introuvable: ${RB_COLORS}`); }),
+    pathExists(RB_ELEMENTS).then(v => { if (!v) throw new Error(`CSV éléments introuvable: ${RB_ELEMENTS}`); }),
   ]);
 
   const rbColors = parseColorsCSV(RB_COLORS);
@@ -383,8 +388,8 @@ async function loadRebrickableData(_ldrawParser: LDrawParser): Promise<{
 
   console.log("[index] Chargement catégories et pièces Rebrickable...");
   await Promise.all([
-    exists(RB_PARTS).then(v => { if (!v) throw new Error(`CSV pièces introuvable: ${RB_PARTS}`); }),
-    exists(RB_CATEGORIES).then(v => { if (!v) throw new Error(`CSV catégories introuvable: ${RB_CATEGORIES}`); }),
+    pathExists(RB_PARTS).then(v => { if (!v) throw new Error(`CSV pièces introuvable: ${RB_PARTS}`); }),
+    pathExists(RB_CATEGORIES).then(v => { if (!v) throw new Error(`CSV catégories introuvable: ${RB_CATEGORIES}`); }),
   ]);
 
   const rbCategories = parsePartCategoriesCSV(RB_CATEGORIES);
